@@ -1,0 +1,1482 @@
+```html
+<!DOCTYPE html>
+<html lang="ms" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PKS E-RevHub | DEG30073 Renewable Energy Systems</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0B132B',
+                            navy: '#1C2541',
+                            blue: '#3A506B',
+                            teal: '#00B4D8',
+                            cyan: '#90E0EF',
+                            gold: '#FFB703',
+                            accent: '#38BDF8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #00B4D8;
+        }
+        .gauge-ring {
+            transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .tab-active {
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.2), rgba(56, 189, 248, 0.08));
+            border-left: 4px solid #00B4D8;
+            color: #38BDF8;
+        }
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .animate-subtle {
+            animation: pulse-subtle 3s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-brand-teal selection:text-brand-dark custom-scrollbar">
+
+    <!-- Top Sticky Header -->
+    <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap justify-between items-center gap-3">
+            <!-- Branding Politeknik Kuching Sarawak -->
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-brand-blue to-brand-teal flex items-center justify-center text-white shadow-lg shadow-brand-teal/20 border border-cyan-400/30">
+                    <i class="fa-solid fa-bolt-lightning text-xl text-brand-gold animate-subtle"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="bg-brand-gold text-slate-950 text-[10px] font-black px-2 py-0.5 rounded tracking-wider uppercase">DEG30073</span>
+                        <h1 class="text-sm sm:text-base font-extrabold tracking-tight text-white">RENEWABLE ENERGY SYSTEMS</h1>
+                    </div>
+                    <p class="text-xs text-slate-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-graduation-cap text-brand-teal text-[11px]"></i>
+                        <span>Jabatan Kejuruteraan Elektrik • Politeknik Kuching Sarawak</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Student Profile & Status Controls -->
+            <div class="flex items-center gap-3 ml-auto sm:ml-0">
+                <button onclick="bukaModalProfil()" class="group flex items-center gap-2.5 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-brand-teal/50 px-3 py-1.5 rounded-xl transition shadow-sm text-left">
+                    <div class="w-8 h-8 rounded-lg bg-cyan-950 text-brand-teal border border-cyan-700/50 flex items-center justify-center font-bold text-xs" id="user-avatar-badge">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <div class="text-xs font-bold text-slate-200 group-hover:text-brand-teal transition truncate max-w-[140px]" id="nav-student-name">Pelajar Semester 3</div>
+                        <div class="text-[10px] text-slate-400 truncate max-w-[120px]" id="nav-student-reg">05DET24F1000</div>
+                    </div>
+                    <i class="fa-solid fa-gear text-slate-400 text-xs pl-1"></i>
+                </button>
+
+                <!-- Data Clear Action -->
+                <button onclick="bukaModalReset()" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-800/80 border border-slate-700 text-slate-400 hover:text-rose-400 hover:border-rose-500/40 transition" title="Set Semula Semua Rekod Revisi">
+                    <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1">
+        
+        <!-- SECTION 1: REAL-TIME MASTERY & UNDERSTANDING TRACKER -->
+        <section class="bg-gradient-to-br from-slate-900 via-slate-900/95 to-slate-850 rounded-2xl border border-slate-800 p-5 sm:p-6 mb-6 shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-24 -top-24 w-72 h-72 bg-brand-teal/5 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <!-- Circular Overall Gauge -->
+                <div class="lg:col-span-5 flex flex-col sm:flex-row items-center gap-5 border-b lg:border-b-0 lg:border-r border-slate-800/80 pb-5 lg:pb-0 lg:pr-6">
+                    <div class="relative w-32 h-32 flex-shrink-0 flex items-center justify-center">
+                        <svg class="w-32 h-32">
+                            <circle cx="64" cy="64" r="54" stroke="#1e293b" stroke-width="10" fill="transparent" />
+                            <circle id="gauge-circle" class="gauge-ring" cx="64" cy="64" r="54" stroke="#00B4D8" stroke-width="10" 
+                                    stroke-dasharray="339.29" stroke-dashoffset="339.29" stroke-linecap="round" fill="transparent" />
+                        </svg>
+                        <div class="absolute flex flex-col items-center">
+                            <span id="overall-percentage" class="text-3xl font-black text-white tracking-tight">0%</span>
+                            <span class="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Skor Pemahaman</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center sm:text-left flex-1">
+                        <div class="flex items-center justify-center sm:justify-start gap-2">
+                            <span id="mastery-indicator-dot" class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+                            <span class="text-xs uppercase font-extrabold tracking-wider text-slate-400">Tahap Kefahaman</span>
+                        </div>
+                        <h2 id="mastery-status-text" class="text-xl sm:text-2xl font-black text-rose-400 mt-0.5 tracking-tight">Perlu Bimbingan</h2>
+                        <p id="mastery-desc-text" class="text-xs text-slate-400 mt-1 leading-relaxed">
+                            Lakukan semakan nota dan selesaikan soalan pengukuhan serta kalkulator interaktif untuk memacu meter pemahaman anda.
+                        </p>
+                        <div class="mt-3 flex flex-wrap items-center justify-center sm:justify-start gap-2 text-[11px] font-semibold text-slate-300">
+                            <span class="bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700/80">
+                                <i class="fa-solid fa-list-check text-brand-teal mr-1"></i>
+                                Kuiz: <strong class="text-white" id="overall-quiz-ratio">0/15</strong> Dijawab
+                            </span>
+                            <span class="bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700/80">
+                                <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>
+                                Ketepatan: <strong class="text-white" id="overall-accuracy">0%</strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 Topics Breakdown Cards -->
+                <div class="lg:col-span-7">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-xs uppercase tracking-wider font-extrabold text-slate-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-chart-simple text-brand-teal"></i>
+                            Pemahaman Mengikut Topik
+                        </h3>
+                        <span class="text-[11px] text-slate-500">Skor gabungan Penilaian Kendiri & Kuiz Objektif</span>
+                    </div>
+
+                    <div class="space-y-2.5" id="topic-progress-bars">
+                        <!-- Bars injected dynamically by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MODUL 5 TOPIK REVISION & INTERACTION -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Sidebar Navigasi Topik -->
+            <nav class="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-3 shadow-xl space-y-1.5">
+                <div class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800/80 flex justify-between items-center">
+                    <span>Modul Pembelajaran</span>
+                    <span class="text-[10px] bg-slate-800 text-brand-teal px-2 py-0.5 rounded font-mono">5 Topik Silibus</span>
+                </div>
+
+                <div class="space-y-1 pt-1" id="topic-nav-container">
+                    <!-- Nav tabs generated by JS -->
+                </div>
+
+                <div class="pt-3 border-t border-slate-800/80 px-2">
+                    <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-brand-gold text-lg"></i>
+                            <div>
+                                <div class="text-xs font-bold text-white">Kalkulator Pantas</div>
+                                <div class="text-[10px] text-slate-400">Formula PV, Angin & Hidro</div>
+                            </div>
+                        </div>
+                        <a href="#quick-calculators" class="bg-brand-teal/20 hover:bg-brand-teal text-brand-teal hover:text-slate-950 border border-brand-teal/40 px-2.5 py-1 rounded-lg text-xs font-bold transition">
+                            Kira &rarr;
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main Topic Content Display Area -->
+            <section class="lg:col-span-8 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                <!-- Topic Topbar -->
+                <div class="bg-slate-850 p-4 sm:p-5 border-b border-slate-800 flex flex-wrap justify-between items-center gap-3" id="topic-header-area">
+                    <!-- Header injected dynamically -->
+                </div>
+
+                <!-- Sub-nav Tabs (Nota vs Kuiz Pengukuhan) -->
+                <div class="bg-slate-900 px-4 sm:px-5 py-2.5 border-b border-slate-800 flex flex-wrap justify-between items-center gap-3">
+                    <div class="flex items-center gap-2 text-xs">
+                        <button onclick="setSubTab('nota')" id="tab-btn-nota" class="px-3.5 py-1.5 rounded-lg font-bold bg-brand-teal text-slate-950 shadow-sm transition">
+                            <i class="fa-solid fa-book-bookmark mr-1"></i> Nota Padat Kuliah
+                        </button>
+                        <button onclick="setSubTab('kuiz')" id="tab-btn-kuiz" class="px-3.5 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white hover:bg-slate-800 border border-transparent transition">
+                            <i class="fa-solid fa-feather mr-1 text-brand-gold"></i> Soalan Pengukuhan (<span id="current-topic-quiz-count">3</span>)
+                        </button>
+                    </div>
+
+                    <!-- Self assessment selector for current topic -->
+                    <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs">
+                        <label class="text-slate-400 font-medium hidden sm:inline">Kefahaman Kendiri:</label>
+                        <select id="topic-self-rating" onchange="kemaskiniRatingKendiri(this.value)" class="bg-transparent text-brand-cyan font-bold focus:outline-none cursor-pointer">
+                            <option value="1" class="bg-slate-900 text-slate-200">⭐ 1/5 - Perlu Bimbingan Penuh</option>
+                            <option value="2" class="bg-slate-900 text-slate-200">⭐⭐ 2/5 - Kurang Faham</option>
+                            <option value="3" class="bg-slate-900 text-slate-200">⭐⭐⭐ 3/5 - Sederhana</option>
+                            <option value="4" class="bg-slate-900 text-slate-200">⭐⭐⭐⭐ 4/5 - Faham</option>
+                            <option value="5" class="bg-slate-900 text-slate-200">⭐⭐⭐⭐⭐ 5/5 - Sangat Mahir</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Dynamic Topic Body Container -->
+                <div class="p-4 sm:p-6" id="topic-body-content">
+                    <!-- Dynamic Notes / Quizzes will be rendered here -->
+                </div>
+            </section>
+        </div>
+
+        <!-- SECTION 3: MINI INTERACTIVE ENGINEERING CALCULATORS -->
+        <section id="quick-calculators" class="mt-8 bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl">
+            <div class="flex flex-wrap justify-between items-center pb-4 mb-6 border-b border-slate-800 gap-2">
+                <div>
+                    <span class="text-[10px] bg-brand-gold/10 text-brand-gold font-black uppercase px-2 py-0.5 rounded tracking-wider border border-brand-gold/20">
+                        Amali & Pengiraan Silibus DEG30073
+                    </span>
+                    <h3 class="text-lg font-bold text-white mt-1 flex items-center gap-2">
+                        <i class="fa-solid fa-microchip text-brand-teal"></i>
+                        Kalkulator Kejuruteraan Tenaga Boleh Baharu
+                    </h3>
+                </div>
+                <p class="text-xs text-slate-400 max-w-md">Gunakan kalkulator di bawah untuk membuat semakan pengiraan tutorial, ujian makmal, dan latihan peperiksaan.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Kalkulator 1: Fill Factor & Pmax Solar PV -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-brand-gold flex items-center gap-1.5">
+                                <i class="fa-solid fa-solar-panel"></i> 1. Solar PV: Fill Factor (FF)
+                            </span>
+                            <span class="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded">Bab 1</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-mono text-center bg-slate-900/60 p-1 rounded border border-slate-800">
+                            FF = Pmax / (Voc × Isc) = (Vmp × Imp) / (Voc × Isc)
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-2 mt-3 text-xs">
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Voc (V):</label>
+                                <input type="number" id="calc-voc" value="21.6" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Isc (A):</label>
+                                <input type="number" id="calc-isc" value="5.8" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Vmp (V):</label>
+                                <input type="number" id="calc-vmp" value="17.2" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Imp (A):</label>
+                                <input type="number" id="calc-imp" value="5.1" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-800">
+                        <button onclick="kiraFillFactor()" class="w-full py-1.5 rounded-lg bg-brand-gold hover:bg-amber-400 text-slate-950 font-bold text-xs transition">
+                            Kira FF & Pmax
+                        </button>
+                        <div id="output-calc-pv" class="mt-2.5 p-2 bg-slate-900 rounded-lg border border-slate-800 text-center">
+                            <span class="text-xs text-slate-400">Pmax: <strong class="text-white font-mono">87.72 W</strong></span> | 
+                            <span class="text-xs text-brand-gold">FF: <strong class="font-mono">0.700</strong> (70.0%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kalkulator 2: Kuasa Turbin Angin -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-brand-teal flex items-center gap-1.5">
+                                <i class="fa-solid fa-wind"></i> 2. Wind Turbine Power
+                            </span>
+                            <span class="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded">Bab 2</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-mono text-center bg-slate-900/60 p-1 rounded border border-slate-800">
+                            P = 0.5 × &rho; × (&pi; r²) × v³ × &eta;
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-2 mt-3 text-xs">
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">&rho; Udara (kg/m³):</label>
+                                <input type="number" id="calc-wind-rho" value="1.225" step="0.005" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Jejari Bilah r (m):</label>
+                                <input type="number" id="calc-wind-radius" value="6.0" step="0.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Halaju v (m/s):</label>
+                                <input type="number" id="calc-wind-v" value="8.0" step="0.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Kecekapan &eta; (max 0.593):</label>
+                                <input type="number" id="calc-wind-eff" value="0.40" step="0.05" max="0.593" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-800">
+                        <button onclick="kiraWindPower()" class="w-full py-1.5 rounded-lg bg-brand-teal hover:bg-cyan-400 text-slate-950 font-bold text-xs transition">
+                            Kira Kuasa Diekstrak
+                        </button>
+                        <div id="output-calc-wind" class="mt-2.5 p-2 bg-slate-900 rounded-lg border border-slate-800 text-center">
+                            <span class="text-xs text-slate-400">Total Angin: <strong class="text-white font-mono">35.48 kW</strong></span> | 
+                            <span class="text-xs text-brand-teal">Output: <strong class="font-mono">14.19 kW</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kalkulator 3: Kuasa Loji Hidroelektrik -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-sky-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-water"></i> 3. Hydroelectric Output Power
+                            </span>
+                            <span class="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded">Bab 3</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1.5 font-mono text-center bg-slate-900/60 p-1 rounded border border-slate-800">
+                            P = &rho; × g × Q × H × &eta;  (&rho;=1000, g=9.81)
+                        </p>
+                        
+                        <div class="grid grid-cols-3 gap-2 mt-3 text-xs">
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Aliran Q (m³/s):</label>
+                                <input type="number" id="calc-hydro-q" value="0.10" step="0.05" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Head H (m):</label>
+                                <input type="number" id="calc-hydro-h" value="100" step="5" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-400 block mb-0.5">Kecekapan &eta;:</label>
+                                <input type="number" id="calc-hydro-eff" value="0.85" step="0.05" max="1" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-1.5 text-white font-mono text-center focus:border-brand-teal focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-800">
+                        <button onclick="kiraHydroPower()" class="w-full py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs transition">
+                            Kira Kuasa Hidro (kW)
+                        </button>
+                        <div id="output-calc-hydro" class="mt-2.5 p-2 bg-slate-900 rounded-lg border border-slate-800 text-center">
+                            <span class="text-xs text-slate-400">P Output = </span>
+                            <strong class="text-sky-300 font-mono text-xs">83.39 kW</strong>
+                            <span class="text-[10px] text-slate-500 block font-mono">(0.083 MW)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-900 py-6 mt-12 text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div>
+                <strong class="text-slate-300">DEG30073 RENEWABLE ENERGY SYSTEMS</strong> • Jabatan Kejuruteraan Elektrik, Politeknik Kuching Sarawak
+            </div>
+            <div class="flex items-center gap-4">
+                <span><i class="fa-solid fa-code text-brand-teal mr-1"></i> E-Revision Web App</span>
+                <span class="text-slate-700">•</span>
+                <span class="text-emerald-400 flex items-center gap-1"><i class="fa-solid fa-floppy-disk"></i> Data Auto-Save (LocalStorage)</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: PROFIL PELAJAR -->
+    <div id="modal-profil" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-id-card text-brand-teal text-lg"></i>
+                    <h3 class="font-bold text-white text-base">Profil Pelajar Politeknik</h3>
+                </div>
+                <button onclick="tutupModalProfil()" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-400 mt-2">Maklumat ini disimpan pada pelayar anda untuk menjejaki kemajuan ulangkaji mengikut rekod peribadi.</p>
+            
+            <div class="mt-4 space-y-3">
+                <div>
+                    <label class="text-xs font-bold text-slate-300 block mb-1">Nama Penuh:</label>
+                    <input type="text" id="input-student-name" placeholder="Cth: Muhammad Daniel bin Azman" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:border-brand-teal focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-300 block mb-1">No. Pendaftaran:</label>
+                    <input type="text" id="input-student-reg" placeholder="Cth: 05DET24F1023" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:border-brand-teal focus:outline-none uppercase">
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-300 block mb-1">Kelas / Semester:</label>
+                    <input type="text" id="input-student-class" value="DET3A - Semester 3" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:border-brand-teal focus:outline-none">
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-2">
+                <button onclick="tutupModalProfil()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-lg transition">Batal</button>
+                <button onclick="simpanProfilPelajar()" class="px-5 py-2 bg-brand-teal hover:bg-cyan-400 text-slate-950 text-xs font-bold rounded-lg transition">Simpan Profil</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: RESET CONFIRMATION -->
+    <div id="modal-reset" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center">
+            <div class="w-12 h-12 rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto mb-3 text-xl border border-rose-500/20">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-base font-bold text-white">Set Semula Semua Kemajuan?</h3>
+            <p class="text-xs text-slate-400 mt-2">Tindakan ini akan memadam semua jawapan kuiz yang telah dihantar dan mengembalikan penilaian kendiri ke tahap asas.</p>
+
+            <div class="mt-6 flex justify-center gap-3">
+                <button onclick="tutupModalReset()" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-lg hover:bg-slate-700 transition">Batal</button>
+                <button onclick="sahkanResetData()" class="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-lg transition">Ya, Padam Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 border border-brand-teal/50 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 transform translate-y-20 opacity-0 transition duration-300 z-50 pointer-events-none">
+        <div class="w-7 h-7 rounded-lg bg-brand-teal/20 text-brand-teal flex items-center justify-center text-sm font-bold" id="toast-icon">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div>
+            <div class="text-xs font-bold" id="toast-title">Notifikasi</div>
+            <div class="text-[11px] text-slate-400" id="toast-msg">Maklumat berjaya dikemaskini.</div>
+        </div>
+    </div>
+
+    <!-- DATA & LOGIK APLIKASI -->
+    <script>
+        // DATA SILIBUS KURSUS DEG30073 LENGKAP
+        const syllabusData = {
+            1: {
+                id: 1,
+                name: "Solar Photovoltaic Power System",
+                short: "Solar PV",
+                badgeColor: "amber",
+                icon: "fa-solar-panel",
+                formula: "FF = Pmax / (Voc × Isc)",
+                desc: "Penukaran sinaran suria terus kepada elektrik DC melalui simpang semikonduktor silikon.",
+                sections: [
+                    {
+                        title: "1. Pengenalan Tenaga Suria & Struktur Sel PV",
+                        points: [
+                            "<strong>Definisi Tenaga Boleh Baharu:</strong> Tenaga yang terhasil daripada aliran semula jadi yang sentiasa berulang dan pulih pada kadar sama seperti penggunaannya (Twidell & Weir, 1986).",
+                            "<strong>Bahan Sel PV:</strong> Berasaskan semikonduktor hablur silikon (Si) yang mempunyai nombor atom 14 (14 proton, 14 neutron dan 4 elektron valens).",
+                            "<strong>Absorber (Penyerap):</strong> Mengandungi lapisan asas semikonduktor jenis p-type dan p++-type. Berfungsi membentuk simpang p-n bersama emitter bagi pengasingan cas pembawa.",
+                            "<strong>Emitter:</strong> Lapisan nipis atas semikonduktor jenis-n.",
+                            "<strong>Anti-Reflective Coating:</strong> Menyaluti sel suria untuk memaksimumkan penyerapan foton dan mengelakkan kehilangan tenaga sinaran akibat pantulan.",
+                            "<strong>Metal Contacts:</strong> Logam bahagian atas (berjarak optimum membenarkan cahaya masuk) mengumpul elektron; logam belakang (rear contact) mengalirkan semula elektron dari litar luar."
+                        ]
+                    },
+                    {
+                        title: "2. Terminologi & Konfigurasi PV",
+                        points: [
+                            "<strong>Cell (Sel):</strong> Unit asas PV yang menghasilkan voltan rendah (~0.5V - 0.6V).",
+                            "<strong>Module (Modul):</strong> Sambungan sel suria secara siri dan selari di dalam perumah kedap.",
+                            "<strong>String (Rentetan):</strong> Sambungan beberapa modul PV secara bersiri bagi meningkatkan voltan sistem.",
+                            "<strong>Panel:</strong> Sekumpulan modul PV yang dipasang secara mekanikal dan dipasang bersama.",
+                            "<strong>Array (Tatasusunan):</strong> Gabungan elektrik dan mekanikal beberapa panel PV lengkap dengan struktur pelekap."
+                        ]
+                    },
+                    {
+                        title: "3. Lengkung Ciri I-V, Fill Factor (FF) & Pmax",
+                        points: [
+                            "<strong>Voc (Open Circuit Voltage):</strong> Voltan maksimum sel ketika litar terbuka (Arus I = 0).",
+                            "<strong>Isc (Short Circuit Current):</strong> Arus maksimum ketika litar terpintas (Voltan V = 0).",
+                            "<strong>MPP (Maximum Power Point):</strong> Titik operasi optimum pada bucu atas lengkung I-V di mana kuasa Pmax (Vmp × Imp) dicapai.",
+                            "<strong>Fill Factor (FF):</strong> Mengukur tahap 'kesegiempatan' lengkung I-V: <code>FF = Pmax / (Voc × Isc)</code>. Sentiasa bernilai &lt; 1.0 (nilai semakin hampir dengan 1 menunjukkan sel semakin berkualiti tinggi).",
+                            "<strong>Rintangan Ciri (Characteristic Resistance):</strong> <code>Rch = Vmp / Imp</code>."
+                        ]
+                    },
+                    {
+                        title: "4. Kesan Suhu, Shading & Orientasi",
+                        points: [
+                            "<strong>Kesan Suhu:</strong> Peningkatan suhu modul mengurangkan kecekapan penukaran PV. Sel suria beroperasi terbaik sekitar 25°C (77°F). Ventilasi semula jadi amat diperlukan.",
+                            "<strong>Kesan Shading (Naungan):</strong> Naungan separa pada 1 atau 2 sel sahaja boleh menjatuhkan output kuasa secara mendadak. <strong>Bypass Diode</strong> digunakan merentasi kelompok sel untuk melindungi modul daripada kesan rosak 'hot-spot'.",
+                            "<strong>Orientasi & Kecondongan:</strong> Panel dilaras mengikut latitud lokasi menghadap matahari bagi menerima insolasi optimum sepanjang tahun."
+                        ]
+                    },
+                    {
+                        title: "5. Jenis Sistem PV, Pengawal Cas & Inverter",
+                        points: [
+                            "<strong>GCPV (Grid-Connected):</strong> Bersambung ke grid utiliti dengan <em>Bidirectional Electricity Meter</em> (rekod import/eksport tenaga) tanpa memerlukan bateri simpanan.",
+                            "<strong>OGPV (Off-Grid):</strong> Sistem terpencil berdikari dengan simpanan bank bateri dan pengawal cas.",
+                            "<strong>Hybrid PV:</strong> Menggabungkan PV dengan sumber tenaga lain seperti turbin angin atau generator diesel sokongan.",
+                            "<strong>Charge Controller:</strong> Menghalang bateri daripada terlajak cas (overcharge), terlajak nyahcas (deep discharge), dan menyekat arus songsang (reverse current) pada waktu malam. Menggunakan 3 fasa cas: <em>Ascending/Bulk</em>, <em>Equalizing</em>, dan <em>Floating Stage</em>.",
+                            "<strong>PWM vs MPPT:</strong> PWM ringkas dan murah; MPPT (Maximum Power Point Tracking) adalah sehingga 30% lebih cekap kerana sentiasa melaras voltan operasi modul pada takat kuasa puncak.",
+                            "<strong>Topologi Inverter:</strong> Micro Inverter (setiap panel bebas), DC Power Optimiser, String Inverter, dan Central Inverter (>100 kWp hingga 1,200 kW bagi pencawang grid voltan sederhana)."
+                        ]
+                    }
+                ],
+                quizzes: [
+                    {
+                        id: "q1_1",
+                        q: "Apakah peranan utama lapisan Anti-Reflective Coating pada permukaan atas sebuah sel suria silikon?",
+                        options: [
+                            "Menyimpan tenaga DC untuk kegunaan waktu malam",
+                            "Memaksimumkan penyerapan cahaya foton dan mengelakkan pantulan",
+                            "Mengubah arus terus DC kepada arus ulang-alik AC",
+                            "Menyejukkan struktur sel di bawah suhu 25°C"
+                        ],
+                        ans: 1,
+                        expl: "Lapisan anti-pantulan (anti-reflective coating) memastikan foton cahaya matahari tidak dipantulkan keluar semula, sebaliknya diserap semaksimum mungkin oleh lapisan semikonduktor."
+                    },
+                    {
+                        id: "q1_2",
+                        q: "Satu modul PV diuji dan mencatatkan Voc = 22 V, Isc = 5.0 A, manakala voltan dan arus pada takat MPP ialah Vmp = 17.5 V dan Imp = 4.4 A. Berapakah nilai Fill Factor (FF)?",
+                        options: [
+                            "0.700",
+                            "0.852",
+                            "0.625",
+                            "0.785"
+                        ],
+                        ans: 0,
+                        expl: "Pmax = Vmp × Imp = 17.5 × 4.4 = 77 W. Kuasa Teori = Voc × Isc = 22 × 5.0 = 110 W. Maka FF = 77 / 110 = 0.700."
+                    },
+                    {
+                        id: "q1_3",
+                        q: "Apakah fungsi komponen 'Bypass Diode' di dalam sesebuah modul solar PV?",
+                        options: [
+                            "Menghalang arus bateri daripada mengalir songsang pada waktu malam",
+                            "Menukarkan kuasa DC solar kepada voltan grid AC",
+                            "Melindungi modul daripada titik panas (hot-spots) apabila berlaku masalah teduhan (shading)",
+                            "Meningkatkan voltan nominal sistem secara automatik"
+                        ],
+                        ans: 2,
+                        expl: "Bypass diode dipasang memintas kelompok sel supaya apabila sebahagian sel terlindung naungan, arus dari sel lain boleh memintasnya tanpa menyebabkan pembentukan beban rintangan lampau (hot-spot damage)."
+                    }
+                ]
+            },
+            2: {
+                id: 2,
+                name: "Wind Power System",
+                short: "Wind Power",
+                badgeColor: "sky",
+                icon: "fa-wind",
+                formula: "P = 0.5 × ρ × A × v³",
+                desc: "Pengekstrakan tenaga kinetik aliran angin kepada kuasa putaran mekanikal dan penjanaan elektrik.",
+                sections: [
+                    {
+                        title: "1. Fizik Persamaan Kuasa Angin & Had Betz",
+                        points: [
+                            "<strong>Persamaan Kuasa Angin:</strong> <code>P = 1/2 &rho; A v&sup3;</code> di mana &rho; = ketumpatan udara (standard laut 1.225 kg/m&sup3;), A = luas sapuan bilah (&pi; r&sup2;), dan v = halaju angin.",
+                            "<strong>Kesan Halaju Kubik (v&sup3;):</strong> Kuasa angin berkadar langsung dengan kuasa tiga halaju angin. Menggandakan kelajuan angin dari 8 m/s ke 16 m/s meningkatkan kuasa yang tersedia sebanyak 8 KALI GANDA (2&sup3; = 8).",
+                            "<strong>Had Betz (Betz Limit):</strong> Turbin angin konvensional tidak boleh mengekstrak lebih daripada <code>16/27 atau 59.3%</code> tenaga kinetik angin. Selebihnya terpaksa dibiarkan melepasi bilah bagi memastikan udara terus mengalir."
+                        ]
+                    },
+                    {
+                        title: "2. Jenis Turbin: HAWT lwn VAWT",
+                        points: [
+                            "<strong>HAWT (Horizontal Axis Wind Turbine):</strong> Paksi putaran mendatar sejajar dengan tanah. <em>Kelebihan:</em> Menara tinggi membolehkan capaian angin berhalaju tinggi, kecekapan pengekstrakan tinggi sepanjang putaran. <em>Kekurangan:</em> Memerlukan sistem Yaw untuk menghadap angin, kotak gear dan penjana terletak di puncak menara menyukarkan servis.",
+                            "<strong>VAWT (Vertical Axis Wind Turbine):</strong> Paksi putaran menegak berserenjang dengan tanah. <em>Kelebihan:</em> Boleh menerima tiupan angin dari sebarang arah tanpa pemandu Yaw, kotak gear dan generator terletak di aras tanah untuk servis mudah. <em>Kekurangan:</em> Beroperasi pada paras rendah dengan angin perlahan, kurang cekap, dan tidak 'self-starting'."
+                        ]
+                    },
+                    {
+                        title: "3. Komponen Sistem Turbin Angin",
+                        points: [
+                            "<strong>Bilah (Blades):</strong> Kebiasaannya diperbuat daripada gentian kaca poliester atau kayu epoksi (wood epoxy). Reka bentuk 3-bilah paling popular bagi mengimbangi tegangan dinamik semasa orientasi yawing.",
+                            "<strong>Hub:</strong> Mengikat semua bilah dan memindahkan beban dinamik putaran terus ke aci utama (main shaft).",
+                            "<strong>Gearbox (Kotak Gear):</strong> Menaikkan kelajuan pusingan perlahan rotor (40 - 400 rpm) kepada kelajuan tinggi yang diperlukan penjana elektrik (1,200 - 1,800 rpm).",
+                            "<strong>Dump Load / Divert Load:</strong> Mengalihkan lebihan beban elektrik kepada rintangan pemanas apabila bateri penuh, bagi menghalang bilah turbin berputar bebas melampau (freewheeling) ketika angin kencang."
+                        ]
+                    },
+                    {
+                        title: "4. Penjana Elektrik (PMSG vs DFIG)",
+                        points: [
+                            "<strong>PMSG (Permanent Magnet Synchronous Generator):</strong> Menggunakan medan magnet kekal pada pemutar (rotor). Boleh beroperasi pada kelajuan rendah tanpa kotak gear (direct drive).",
+                            "<strong>DFIG (Doubly-Fed Induction Generator):</strong> Rotor luka disambungkan ke grid menerusi penukar frekuensi back-to-back slip ring. Membolehkan operasi pada pelbagai kelajuan (variable-speed operation) sambil mengekalkan frekuensi grid 50 Hz secara cekap."
+                        ]
+                    },
+                    {
+                        title: "5. Mekanisme Kawalan & Ciri Keluk Kuasa (Power Curve)",
+                        points: [
+                            "<strong>Cut-in Speed (3 - 4 m/s):</strong> Kelajuan angin minimum di mana tork mencukupi untuk memulakan putaran bilah dan penjanaan elektrik.",
+                            "<strong>Rated Speed (12 - 17 m/s):</strong> Kelajuan di mana penjana elektrik mencapai had keupayaan output maksimum yang dinamakan <em>Rated Power</em>.",
+                            "<strong>Cut-out Speed (~25 m/s):</strong> Takat halaju kritikal di mana brek keselamatan mekanikal/aerodinamik diaktifkan untuk menghentikan rotor bagi mengelakkan kerosakan struktur.",
+                            "<strong>Mekanisme Kawalan Kelajuan:</strong> <em>Blade Pitch Control</em> (melaras sudut bilah), <em>Furling</em> (mencondongkan paksi turbin keluar dari arah tiupan angin secara aktif atau pasif), dan <em>Mechanical Disc Brakes</em>."
+                        ]
+                    }
+                ],
+                quizzes: [
+                    {
+                        id: "q2_1",
+                        q: "Menurut Hukum Betz (Betz Limit), berapakah kecekapan maksimum teoritikal yang mampu diekstrak oleh turbin angin daripada aliran kinetik angin?",
+                        options: [
+                            "100%",
+                            "59.3% (16/27)",
+                            "75.5%",
+                            "45.0%"
+                        ],
+                        ans: 1,
+                        expl: "Had Betz menyatakan nisbah maksimum tenaga kinetik yang boleh dipindahkan kepada rotor ialah 16/27 atau bersamaan 59.3%."
+                    },
+                    {
+                        id: "q2_2",
+                        q: "Jika kelajuan tiupan angin meningkat dari 5 m/s kepada 10 m/s (gandaan 2 kali), berapakah nisbah peningkatan jumlah kuasa kinetik yang terkandung di dalam angin?",
+                        options: [
+                            "2 kali ganda",
+                            "4 kali ganda",
+                            "8 kali ganda",
+                            "16 kali ganda"
+                        ],
+                        ans: 2,
+                        expl: "Persamaan kuasa angin berkadar terus dengan halaju kuasa tiga (v³). Maka gandaan halaju dua kali ganda menghasilkan 2³ = 8 kali ganda kuasa."
+                    },
+                    {
+                        id: "q2_3",
+                        q: "Apakah peranan utama komponen 'Dump Load' di dalam sesebuah sistem kuasa angin berasaskan bateri?",
+                        options: [
+                            "Menaikkan voltan sistem bateri apabila angin berhenti",
+                            "Mengalihkan lebihan kuasa yang dijana ketika bateri telah penuh bagi mengelakkan turbin berputar lampau tanpa beban (freewheeling)",
+                            "Menyegerakkan fasa penjana dengan grid utiliti",
+                            "Memusingkan yaw turbin ke arah angin"
+                        ],
+                        ans: 1,
+                        expl: "Dump load menampung tenaga berlebihan apabila bateri telah dicas penuh supaya turbin kekal berada di bawah beban elektrik dan tidak mengalami pusaran berbahaya."
+                    }
+                ]
+            },
+            3: {
+                id: 3,
+                name: "Hydroelectric Plant",
+                short: "Hydro Plant",
+                badgeColor: "cyan",
+                icon: "fa-water",
+                formula: "P = ρ × g × Q × H × η",
+                desc: "Penuaian tenaga keupayaan air takungan kepada tenaga kinetik pancutan dan kuasa elektrik segerak.",
+                sections: [
+                    {
+                        title: "1. Prinsip & Komponen Utama Loji Hidroelektrik",
+                        points: [
+                            "<strong>Penukaran Tenaga:</strong> Tenaga Keupayaan Air (Reservoir Dam) &rarr; Tenaga Kinetik Air Mengalir (Penstock) &rarr; Tenaga Mekanikal Putaran (Turbine) &rarr; Tenaga Elektrik (Synchronous Generator).",
+                            "<strong>Dam (Empangan):</strong> Menahan takungan air bagi membina ketinggian turus hidraulik (head).",
+                            "<strong>Penstock:</strong> Paip saluran bertekanan tinggi yang menyalurkan air dari empangan ke bilah turbin.",
+                            "<strong>Tailrace:</strong> Laluan keluar air dari bilah turbin kembali ke sungai selepas tenaganya diekstrak.",
+                            "<strong>Persamaan Kuasa Hidro:</strong> <code>P = &rho; &times; g &times; Q &times; H &times; &eta;</code> (dengan &rho; = 1000 kg/m&sup3;, g = 9.81 m/s&sup2;, Q = kadar aliran padu m&sup3;/s, H = head berkesan meter, &eta; = kecekapan keseluruhan loji)."
+                        ]
+                    },
+                    {
+                        title: "2. Klasifikasi Ketinggian Turus (Head) & Skala Loji",
+                        points: [
+                            "<strong>Low Head:</strong> Paras turus air <strong>&le; 30 meter</strong> (lazimnya menggunakan aliran sungai terus run-of-river atau pasang surut).",
+                            "<strong>Medium Head:</strong> Paras turus antara <strong>30 m hingga 300 meter</strong> (banyak terdapat di kawasan pergunungan berbukit).",
+                            "<strong>High Head:</strong> Paras turus <strong>&gt; 300 meter</strong> (menggunakan empangan berkapasiti besar dan dilengkapi <em>surge tank</em> bagi menyerap kesan water hammer).",
+                            "<strong>Klasifikasi Skala Kapasiti:</strong> Micro Hydro (&le; 5 kW, lazimnya DC atau stand-alone rumah kampung), Mini Hydro (5 kW - 100 kW), dan Small Hydro (100 kW - 1 MW)."
+                        ]
+                    },
+                    {
+                        title: "3. Jenis Turbin: Impuls lwn Reaksi",
+                        points: [
+                            "<strong>Turbin Impuls (Tekanan Atmosfera Malar):</strong> Menggunakan tenaga kinetik pancutan jet air berkelajuan tinggi. Contoh: <em>Pelton</em> (sesuai High Head, Low Flow; mangkuk terbelah dua yang menepis jet 165°), <em>Turgo</em> (menerima jet pada sudut condong, runner lebih padat), dan <em>Crossflow/Banki</em> (sesuai untuk mini/mikro hydro).",
+                            "<strong>Turbin Reaksi (Perubahan Tekanan Air Dalam Runner):</strong> Mengisi keseluruhan aliran secara tertutup. Contoh: <em>Francis</em> (Medium Head; paling meluas digunakan dunia dengan bilah pandu guide vanes), <em>Kaplan</em> (Low Head, High Discharge; bilah boleh laras menyerupai kipas kapal), dan <em>Propeller</em> (bilah tetap)."
+                        ]
+                    },
+                    {
+                        title: "4. Kawalan Frekuensi (Governor) & Kawalan Voltan (AVR)",
+                        points: [
+                            "<strong>Kawalan Frekuensi (Speed Governor):</strong> Frekuensi elektrik (50 Hz) bergantung terus kepada kelajuan pusingan aci turbin (N). Speed Governor mengesan perubahan kelajuan akibat beban lalu melaraskan bukaan <em>guide vanes / wicket gates</em> bagi mengawal kadar aliran air Q.",
+                            "<strong>Kawalan Voltan (Automatic Voltage Regulator - AVR):</strong> Voltan penjana segerak dikawal melalui arus medan pengujaan (field excitation current) tanpa mengganggu kelajuan turbin. AVR mengubah sudut penyalaan (firing angle) jambatan thyristor bagi menstabilkan voltan terminal dan kuasa reaktif (kVAR)."
+                        ]
+                    },
+                    {
+                        title: "5. Syarat Penyegerakan (Synchro-Check) & Regulasi Droop",
+                        points: [
+                            "<strong>3 Syarat Utama Penyegerakan (Synchronization):</strong>",
+                            "1) Perbezaan Frekuensi (&Delta;f) mestilah sangat kecil: lazimnya <strong>0.1 - 0.2 Hz</strong>.",
+                            "2) Perbezaan Voltan (&Delta;V) mestilah dalam lingkungan <strong>&le; 5%</strong> daripada voltan busbar.",
+                            "3) Perbezaan Sudut Fasa (&Delta;&theta;) mestilah sepadan dalam had <strong>&le; 10°</strong>.",
+                            "<strong>Synchro-check Relay:</strong> Menyekat pemutus litar (circuit breaker) daripada ditutup sehingga ketiga-tiga syarat di atas dipenuhi untuk mengelakkan lonjakan arus kerosakan merosakkan penjana.",
+                            "<strong>Regulasi Droop (3% - 5%):</strong> Penurunan kecil kelajuan/frekuensi secara sengaja apabila beban bertambah bagi membolehkan perkongsian kuasa sebenar (kW load sharing) yang berkadar dan stabil antara generator selari."
+                        ]
+                    }
+                ],
+                quizzes: [
+                    {
+                        id: "q3_1",
+                        q: "Apakah jenis turbin air yang paling efisien dan lazim digunakan untuk loji bertekanan turus tinggi (High Head > 300m) dengan kadar alir yang rendah?",
+                        options: [
+                            "Turbin Kaplan",
+                            "Turbin Pelton",
+                            "Turbin Francis",
+                            "Turbin Propeller"
+                        ],
+                        ans: 1,
+                        expl: "Turbin Pelton ialah turbin impuls yang menggunakan nozel muncung jet air halaju tinggi pada mangkuk pembahagi 165° bagi tapak turus air melebihi 300 meter."
+                    },
+                    {
+                        id: "q3_2",
+                        q: "Untuk menyegerakkan (synchronize) penjana hidroelektrik masuk ke dalam busbar grid kebangsaan, had perbezaan frekuensi (Δf) yang dibenarkan oleh synchro-check relay biasanya adalah:",
+                        options: [
+                            "0.1 hingga 0.2 Hz",
+                            "2.0 hingga 5.0 Hz",
+                            "10 hingga 15 Hz",
+                            "Sifar mutlak (0.000 Hz) tanpa sebarang toleransi"
+                        ],
+                        ans: 0,
+                        expl: "Toleransi perbezaan frekuensi yang standard bagi perlindungan synchro-check relay adalah antara 0.1 hingga 0.2 Hz."
+                    },
+                    {
+                        id: "q3_3",
+                        q: "Apakah peranan utama mekanisma 'Speed Droop' (biasanya 3% - 5%) dalam sistem gabenor loji hidro yang beroperasi secara selari?",
+                        options: [
+                            "Mematikan turbin apabila paras air empangan surut",
+                            "Membolehkan perkongsian beban aktif (kW) berlaku secara stabil dan berkadar di antara unit penjana",
+                            "Menukar arus ulang-alik AC kepada arus terus DC",
+                            "Menaikkan kecekapan hidraulik paip penstock"
+                        ],
+                        ans: 1,
+                        expl: "Speed droop regulation membenarkan sedikit pengurangan kelajuan terancang bagi memastikan beberapa generator selari dapat berkongsi peningkatan beban sebenar (kW) tanpa bersaing sesama sendiri."
+                    }
+                ]
+            },
+            4: {
+                id: 4,
+                name: "Bioenergy Power System",
+                short: "Bioenergy",
+                badgeColor: "emerald",
+                icon: "fa-seedling",
+                formula: "C₆H₁₂O₆ → CH₄ + CO₂",
+                desc: "Pemanfaatan sisa biomas organik, sisa pepejal perbandaran dan biogas bagi penjanaan tenaga mampan.",
+                sections: [
+                    {
+                        title: "1. Pengenalan Biojisim & Tanaman Tenaga",
+                        points: [
+                            "<strong>Definisi Biojisim (Biomass):</strong> Bahan api organik yang diperoleh daripada sumber biologi hidup atau sisa buangan haiwan dan tumbuhan.",
+                            "<strong>Energy Crops:</strong> Tanaman berkayu atau herba kos rendah yang ditanam khusus untuk pembakaran stesen kuasa atau diekstrak menjadi biofuel (contoh: jagung, tebu, kelapa sawit, pokok willow).",
+                            "<strong>Sisa Biodegradasi:</strong> Sisa domestik, sisa pertanian kilang kelapa sawit (POME & EFB), dan najis ternakan yang boleh mereput menghasilkan gas metana secara anaerobik."
+                        ]
+                    },
+                    {
+                        title: "2. Sistem Penerimaan & Penyediaan Bahan Api Pepejal",
+                        points: [
+                            "<strong>Receiving System:</strong> Lori memunggah biomas ke dalam <em>open hopper</em> (storan sementara), disalurkan melalui konveyor rantai/tali sawat, dan diagihkan menggunakan <em>radial stacker</em> bagi membentuk timbunan teratur di kawasan simpanan.",
+                            "<strong>Processing & Screening:</strong> Pengasingan logam (metal separator), penapisan bendasing bukan mudah terbakar, dan penghancuran/penghirisan (shredding) saiz zarah bagi pembakaran efisien di dalam dandang.",
+                            "<strong>Buffer Storage (Storan Penimbal):</strong> Menyimpan bekalan bahan api mencukupi untuk 24 jam serta bertindak sebagai penyimpan tenaga terma semasa fasa pemanasan dandang.",
+                            "<strong>Fuel Metering:</strong> Pengumpanan pneumatik atau skru auger yang menyalurkan kadar kuantiti bahan api secara tepat dan stabil ke dalam relau."
+                        ]
+                    },
+                    {
+                        title: "3. Komposisi Biogas & Sistem Pembersihan (Gas Conditioning)",
+                        points: [
+                            "<strong>Pencernaan Anaerobik:</strong> Penguraian mikrob bakteria dalam keadaan ketiadaan oksigen.",
+                            "<strong>Komposisi Biogas:</strong> Terdiri daripada <strong>50% - 75% Metana (CH₄)</strong> dan <strong>25% - 45% Karbon Dioksida (CO₂)</strong>, dengan suhu nyalaan antara 650°C - 750°C (terbakar dengan api biru bersih).",
+                            "<strong>H₂S Scrubber:</strong> Membersihkan gas asid Hidrogen Sulfida toksik supaya kepekatannya jatuh <strong>di bawah 200 ppm</strong> bagi mengelakkan kakisan enjin.",
+                            "<strong>Dehumidifier / Gas Chiller:</strong> Mengeringkan lembapan air (mengekalkan kelembapan bandingan di bawah 80% RH) bagi mengelakkan kondensasi dan pembentukan asid sulfurik.",
+                            "<strong>Biogas Flare:</strong> Menara suar keselamatan wajib dipasang untuk membakar lebihan gas bertekanan tinggi semasa loji terhenti atau kecemasan."
+                        ]
+                    },
+                    {
+                        title: "4. Sisa Pepejal Perbandaran (MSW) & RDF",
+                        points: [
+                            "<strong>Municipal Solid Waste (MSW):</strong> Sisa domestik perbandaran mempunyai ketumpatan tenaga rendah (~9 GJ/tan) dan kelembapan tinggi (~20%).",
+                            "<strong>RDF (Refuse-Derived Fuel):</strong> Bahan sisa pepejal yang telah melalui proses pemisahan sisa bukan terbakar, penghancuran, dan pengeringan.",
+                            "<strong>d-RDF (Densified RDF):</strong> Produk sisa paling bermutu tinggi yang dihancurkan dan dimampatkan secara mampatan hidraulik menjadi bentuk pelet pepejal berketumpatan tenaga tinggi."
+                        ]
+                    },
+                    {
+                        title: "5. Laluan Penukaran Termokimia & Biofuel Cecair",
+                        points: [
+                            "<strong>Gasifikasi (Gasification):</strong> Penukaran termokimia bahan api pepejal kepada <em>producer gas / syngas</em> (campuran CO dan H₂) pada suhu melebihi 1,000°C dengan bekalan oksigen separa terhad.",
+                            "<strong>Pirolisis (Pyrolysis):</strong> Pemanasan haba tanpa kehadiran oksigen sama sekali untuk memeluwapkan gas menjadi cecair minyak bio (bio-oil).",
+                            "<strong>Fermentasi:</strong> Proses anaerobik mikrob yis menukarkan gula tumbuhan menjadi bioetanol cecair untuk campuran petrol.",
+                            "<strong>Transesterifikasi (Transesterification):</strong> Menukarkan minyak sayuran atau sisa lemak haiwan menjadi <strong>Biodiesel</strong> melalui tindak balas bersama metanol/etanol dan mangkin alkali."
+                        ]
+                    }
+                ],
+                quizzes: [
+                    {
+                        id: "q4_1",
+                        q: "Apakah komponen gas utama yang boleh terbakar dan membekalkan nilai kalori tenaga di dalam biogas?",
+                        options: [
+                            "Karbon Dioksida (CO₂)",
+                            "Hidrogen Sulfida (H₂S)",
+                            "Metana (CH₄) dengan komposisi 50% - 75%",
+                            "Nitrogen Oksida (NOx)"
+                        ],
+                        ans: 2,
+                        expl: "Metana (CH₄) merangkumi 50% hingga 75% daripada kandungan biogas dan merupakan punca utama tenaga haba untuk memacu enjin pembakaran gas."
+                    },
+                    {
+                        id: "q4_2",
+                        q: "Apakah proses kimia yang digunakan untuk menukarkan minyak sayuran mentah menjadi bahan api cecair biodiesel mesra enjin diesel?",
+                        options: [
+                            "Transesterifikasi (Transesterification)",
+                            "Gasifikasi (Gasification)",
+                            "Pirolisis (Pyrolysis)",
+                            "Pencernaan Anaerobik"
+                        ],
+                        ans: 0,
+                        expl: "Transesterifikasi ialah proses tindak balas esterifikasi di mana metanol atau etanol ditambah bersama mangkin bagi menukarkan trigliserida minyak sayuran kepada metil ester (biodiesel) dan gliserol."
+                    },
+                    {
+                        id: "q4_3",
+                        q: "Di dalam loji penyediaan biogas, apakah had kepekatan maksimum selamat bagi gas Hidrogen Sulfida (H₂S) selepas keluar dari scrubber sebelum disalurkan ke enjin janakuasa?",
+                        options: [
+                            "Di bawah 200 ppm",
+                            "Kira-kira 5,000 ppm",
+                            "Sekurang-kurangnya 25%",
+                            "Tiada had had keselamatan"
+                        ],
+                        ans: 0,
+                        expl: "H₂S Scrubber mesti menurunkan tahap gas mengakis H₂S kepada paras di bawah 200 ppm untuk mengelakkan asid sulfurik memusnahkan komponen dalaman enjin gas."
+                    }
+                ]
+            },
+            5: {
+                id: 5,
+                name: "Other Renewable Energy Power System",
+                short: "Tidal & Wave",
+                badgeColor: "indigo",
+                icon: "fa-water-ladder",
+                formula: "P_tidal ∝ R² & A_basin",
+                desc: "Pengeksploitasian fenomena graviti bulan lautan (Pasang Surut) dan pemindahan momentum angin (Gelombang Ombak).",
+                sections: [
+                    {
+                        title: "1. Prinsip Fizik Tenaga Pasang Surut (Tidal Energy)",
+                        points: [
+                            "<strong>Punca Pasang Surut:</strong> Fenomena tarikan daya graviti bulan dan matahari ke atas jisim air lautan bumi yang berlaku berkala secara sinusoidal dua kali sehari.",
+                            "<strong>Tidal Barrage:</strong> Struktur empangan merentangi teluk/muara sungai (estuari) bagi memerangkap air pada waktu pasang tinggi untuk menghasilkan perbezaan aras turus hidraulik.",
+                            "<strong>Syarat Daya Maju Ekonomi:</strong> Julat pasang surut (tidal range R iaitu perbezaan paras pasang tinggi ke surut rendah) <strong>sekurang-kurangnya 5 meter</strong> diperlukan bagi membolehkan loji komersial beroperasi.",
+                            "<strong>Kuasa Purata Tidal Barrage:</strong> Berkadar terus dengan punca ganda dua julat pasang surut: <code>P &prop; R&sup2;</code> serta luas lembangan takungan (basin area A)."
+                        ]
+                    },
+                    {
+                        title: "2. Skim Operasi Tidal Barrage",
+                        points: [
+                            "<strong>Ebb Generation (Penjanaan Ketika Surut):</strong> Air laut masuk memenuhkan lembangan semasa air pasang menerusi pintu sluis. Sluis ditutup pada takat pasang maksimum. Apabila air laut mula surut, air takungan dilepaskan keluar melalui turbin menjana elektrik (beroperasi kira-kira 4 jam setiap kitaran).",
+                            "<strong>Flood Generation (Penjanaan Ketika Pasang):</strong> Air laut yang melonjak masuk ketika pasang dibenarkan memutarkan turbin untuk mengisi lembangan takungan yang kosong.",
+                            "<strong>Two-Way Operation:</strong> Turbin menjana elektrik dalam kedua-dua arah (semasa air laut mengalir masuk mahupun ketika air mengalir keluar kembali ke laut)."
+                        ]
+                    },
+                    {
+                        title: "3. Konfigurasi Turbin Pasang Surut",
+                        points: [
+                            "<strong>Bulb Turbines:</strong> Saluran mendatar berbentuk kelongsong keluli kapal selam (bulb) yang menempatkan penjana dan runner Kaplan terus di tengah-tengah laluan air.",
+                            "<strong>Straflo / Rim Generator Turbines:</strong> Rotor penjana dipasang terus mengelilingi rim luar bilah turbin manakala stator terletak di luar selongsong saluran air. Ini memudahkan proses penyelenggaraan.",
+                            "<strong>Tubular Turbines:</strong> Penjana elektrik dipasang di luar saluran air pada sudut condong (contohnya 45°) yang dihubungkan melalui aci panjang."
+                        ]
+                    },
+                    {
+                        title: "4. Tenaga Ombak (Wave Energy) & Teknologi Penukar",
+                        points: [
+                            "<strong>Pembentukan Gelombang:</strong> Angin yang bertiup di atas permukaan laut memindahkan tenaga melalui tegasan ricih ke atas zarah air.",
+                            "<strong>Karakteristik Gelombang:</strong> Crest (puncak tertinggi), Trough (palung terendah), Wave Height H (ketinggian dari palung ke puncak), dan Wavelength &lambda; (jarak antara puncak berturutan).",
+                            "<strong>OWC (Oscillating Water Column):</strong> Struktur tebing pantai separa tenggelam dengan ruang udara terperangkap di atas aras air laut. Kenaikan dan penurunan ombak menolak dan menyedut turus udara secara berselang-seli untuk memusingkan <em>Wells Turbine</em> dua arah.",
+                            "<strong>TAPCHAN (Tapered Channel):</strong> Saluran curam menirus dibina di tebing tebing laut. Gelombang ombak yang memasuki saluran sempit melimpasi dinding ke takungan atas. Air takungan kemudian dialirkan turun melalui turbin konvensional secara stabil."
+                        ]
+                    },
+                    {
+                        title: "5. Perbandingan Utama Pasang Surut vs Ombak",
+                        points: [
+                            "<strong>Tidal Energy:</strong> Berpunca daripada daya graviti astronomi cakerawala, sangat boleh diramal (highly predictable mengikut takwim bulan), menggunakan empangan lembangan muara.",
+                            "<strong>Wave Energy:</strong> Berpunca daripada geseran kinetik angin ke atas permukaan laut, lebih berubah-ubah (intermittent bergantung tiupan angin setempat), memanfaatkan peranti pantai atau apungan lepas pantai (offshore floating)."
+                        ]
+                    }
+                ],
+                quizzes: [
+                    {
+                        id: "q5_1",
+                        q: "Berapakah julat pasang surut purata minimum (mean tidal range) yang lazimnya disyaratkan untuk pembinaan loji komersial tidal barrage yang berdaya maju?",
+                        options: [
+                            "Sekurang-kurangnya 1 meter",
+                            "Sekurang-kurangnya 5 meter",
+                            "Sekurang-kurangnya 20 meter",
+                            "Sekurang-kurangnya 50 meter"
+                        ],
+                        ans: 1,
+                        expl: "Julat minimum pasang surut kira-kira 5 meter diperlukan untuk menghasilkan turus ketinggian air (head) yang mencukupi bagi memutarkan turbin loji komersial."
+                    },
+                    {
+                        id: "q5_2",
+                        q: "Di dalam skim operasi 'Ebb Generation' sebuah loji tidal barrage, bilakah turbin hidro memutarkan penjana untuk menghasilkan tenaga elektrik?",
+                        options: [
+                            "Semasa air pasang tinggi sedang deras memasuki empangan",
+                            "Semasa air laut mula surut dan air takungan empangan dilepaskan keluar ke laut melalui turbin",
+                            "Semasa pintu sluis ditutup sepenuhnya pada waktu tengah malam",
+                            "Secara seragam tanpa henti selama 24 jam"
+                        ],
+                        ans: 1,
+                        expl: "Skim Ebb menjana tenaga apabila air yang terperangkap pada aras tinggi di dalam lembangan dialirkan keluar kembali ke laut semasa fenomena air surut."
+                    },
+                    {
+                        id: "q5_3",
+                        q: "Peranti tenaga gelombang laut manakah yang menggunakan konsep kenaikan aras air untuk memampatkan dan menyedut udara melalui turbin dwiarah (Wells Turbine)?",
+                        options: [
+                            "TAPCHAN (Tapered Channel)",
+                            "OWC (Oscillating Water Column)",
+                            "Pelton Jet Wheel",
+                            "Francis Runner"
+                        ],
+                        ans: 1,
+                        expl: "OWC (Oscillating Water Column) menggunakan pergerakan piston air ombak laut untuk memampatkan turus udara keluar masuk melalui turbin Wells."
+                    }
+                ]
+            }
+        };
+
+        // APPLICATION STATE
+        let activeTopicId = 1;
+        let activeSubTab = 'nota'; // 'nota' or 'kuiz'
+        
+        let appState = {
+            profile: {
+                name: "Pelajar Semester 3",
+                reg: "05DET24F1000",
+                class: "DET3A"
+            },
+            topicRatings: { 1: 3, 2: 3, 3: 3, 4: 3, 5: 3 },
+            quizAnswers: {} // format: 'q1_1': { selected: 1, isCorrect: true }
+        };
+
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            muatDataLocalStorage();
+            kemaskiniPaparanProfil();
+            renderTopicNavigation();
+            renderTopicProgressBars();
+            muatKandunganTopik(1);
+            kemaskiniIndikatorMastery();
+        });
+
+        // LOCAL STORAGE FUNCTIONS
+        function muatDataLocalStorage() {
+            try {
+                const stored = localStorage.getItem('deg30073_pks_db_v2');
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    appState = { ...appState, ...parsed };
+                }
+            } catch (err) {
+                console.error("Ralat membaca LocalStorage:", err);
+            }
+        }
+
+        function simpanDataLocalStorage() {
+            try {
+                localStorage.setItem('deg30073_pks_db_v2', JSON.stringify(appState));
+            } catch (err) {
+                console.error("Ralat menyimpan ke LocalStorage:", err);
+            }
+        }
+
+        // PROFILE HANDLING
+        function bukaModalProfil() {
+            document.getElementById('input-student-name').value = appState.profile.name;
+            document.getElementById('input-student-reg').value = appState.profile.reg;
+            document.getElementById('input-student-class').value = appState.profile.class;
+            document.getElementById('modal-profil').classList.remove('hidden');
+        }
+
+        function tutupModalProfil() {
+            document.getElementById('modal-profil').classList.add('hidden');
+        }
+
+        function simpanProfilPelajar() {
+            const name = document.getElementById('input-student-name').value.trim() || "Pelajar Semester 3";
+            const reg = document.getElementById('input-student-reg').value.trim().toUpperCase() || "05DET24F1000";
+            const kls = document.getElementById('input-student-class').value.trim() || "DET3A";
+
+            appState.profile = { name, reg, class: kls };
+            simpanDataLocalStorage();
+            kemaskiniPaparanProfil();
+            tutupModalProfil();
+            tunjukToast("Profil Disimpan", "Maklumat pendaftaran anda telah dikemaskini.");
+        }
+
+        function kemaskiniPaparanProfil() {
+            document.getElementById('nav-student-name').innerText = appState.profile.name;
+            document.getElementById('nav-student-reg').innerText = `${appState.profile.reg} • ${appState.profile.class}`;
+            
+            // Inisial untuk avatar
+            const inisial = appState.profile.name.substring(0, 2).toUpperCase();
+            document.getElementById('user-avatar-badge').innerText = inisial;
+        }
+
+        // RESET HANDLING
+        function bukaModalReset() {
+            document.getElementById('modal-reset').classList.remove('hidden');
+        }
+
+        function tutupModalReset() {
+            document.getElementById('modal-reset').classList.add('hidden');
+        }
+
+        function sahkanResetData() {
+            appState.quizAnswers = {};
+            appState.topicRatings = { 1: 3, 2: 3, 3: 3, 4: 3, 5: 3 };
+            simpanDataLocalStorage();
+            tutupModalReset();
+            muatKandunganTopik(activeTopicId);
+            renderTopicProgressBars();
+            kemaskiniIndikatorMastery();
+            tunjukToast("Data Diset Semula", "Semua rekod soalan dan penilaian telah dikosongkan.");
+        }
+
+        // NAVIGATION RENDERING
+        function renderTopicNavigation() {
+            const container = document.getElementById('topic-nav-container');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= 5; i++) {
+                const topic = syllabusData[i];
+                const isActive = (i === activeTopicId);
+
+                const btn = document.createElement('button');
+                btn.onclick = () => tukarTopik(i);
+                btn.id = `nav-topic-btn-${i}`;
+                btn.className = `w-full text-left p-3 rounded-xl transition flex items-center justify-between gap-3 text-xs font-semibold ${isActive ? 'tab-active' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'}`;
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-2.5 truncate">
+                        <span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-black ${isActive ? 'bg-brand-teal text-slate-950' : 'bg-slate-800 text-slate-300'}">
+                            ${i}
+                        </span>
+                        <div class="truncate">
+                            <div class="truncate text-slate-200 font-bold">${topic.short}</div>
+                            <div class="text-[10px] text-slate-400 truncate">${topic.name}</div>
+                        </div>
+                    </div>
+                    <span id="nav-topic-badge-${i}" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">
+                        ${kiraSkorTopik(i)}%
+                    </span>
+                `;
+
+                container.appendChild(btn);
+            }
+        }
+
+        function tukarTopik(id) {
+            activeTopicId = id;
+            renderTopicNavigation();
+            muatKandunganTopik(id);
+        }
+
+        function setSubTab(tab) {
+            activeSubTab = tab;
+            const btnNota = document.getElementById('tab-btn-nota');
+            const btnKuiz = document.getElementById('tab-btn-kuiz');
+
+            if (tab === 'nota') {
+                btnNota.className = "px-3.5 py-1.5 rounded-lg font-bold bg-brand-teal text-slate-950 shadow-sm transition";
+                btnKuiz.className = "px-3.5 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white hover:bg-slate-800 border border-transparent transition";
+            } else {
+                btnKuiz.className = "px-3.5 py-1.5 rounded-lg font-bold bg-brand-gold text-slate-950 shadow-sm transition";
+                btnNota.className = "px-3.5 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white hover:bg-slate-800 border border-transparent transition";
+            }
+            muatKandunganTopik(activeTopicId);
+        }
+
+        // TOPIC CONTENT RENDERING
+        function muatKandunganTopik(id) {
+            const topic = syllabusData[id];
+
+            // Render Header Topik
+            const headerArea = document.getElementById('topic-header-area');
+            headerArea.innerHTML = `
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-brand-blue/40 text-brand-cyan border border-brand-teal/30">
+                            Modul Topik ${id}
+                        </span>
+                        <span class="text-xs font-mono text-slate-400 hidden sm:inline">${topic.formula}</span>
+                    </div>
+                    <h2 class="text-base sm:text-xl font-black text-white mt-1 flex items-center gap-2">
+                        <i class="fa-solid ${topic.icon} text-brand-teal"></i>
+                        <span>${topic.name}</span>
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">${topic.desc}</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-slate-400 block">Indikator Topik:</span>
+                    <span class="text-sm font-black font-mono text-brand-teal" id="topic-header-score">${kiraSkorTopik(id)}%</span>
+                </div>
+            `;
+
+            // Set Rating Kendiri Semasa
+            const ratingSelect = document.getElementById('topic-self-rating');
+            ratingSelect.value = appState.topicRatings[id] || 3;
+
+            // Render Kandungan Mengikut Sub-Tab
+            const body = document.getElementById('topic-body-content');
+            if (activeSubTab === 'nota') {
+                renderNotaPadat(body, topic);
+            } else {
+                renderKuizPengukuhan(body, topic);
+            }
+        }
+
+        function renderNotaPadat(container, topic) {
+            let html = `<div class="space-y-4">`;
+
+            topic.sections.forEach((sec, idx) => {
+                html += `
+                    <div class="bg-slate-950/80 rounded-xl border border-slate-800 p-4 hover:border-slate-700/80 transition shadow-sm">
+                        <h4 class="text-xs sm:text-sm font-bold text-brand-cyan flex items-center gap-2 pb-2 mb-2 border-b border-slate-900">
+                            <span class="w-5 h-5 rounded-md bg-slate-900 text-brand-teal border border-slate-800 flex items-center justify-center text-xs font-black">
+                                ${idx + 1}
+                            </span>
+                            ${sec.title}
+                        </h4>
+                        <ul class="space-y-2 text-xs text-slate-300 leading-relaxed">
+                            ${sec.points.map(pt => `
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-angle-right text-brand-teal text-[11px] mt-1 flex-shrink-0"></i>
+                                    <div>${pt}</div>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function renderKuizPengukuhan(container, topic) {
+            let html = `
+                <div class="space-y-5">
+                    <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-400"><i class="fa-solid fa-circle-question text-brand-gold mr-1"></i> Selesaikan 3 soalan pengukuhan konsep & pengiraan ini.</span>
+                        <span class="text-brand-teal font-bold font-mono">Skor Terkini: ${kiraBetulKuizTopik(topic.id)}/3 Betul</span>
+                    </div>
+            `;
+
+            topic.quizzes.forEach((qItem, qIdx) => {
+                const saved = appState.quizAnswers[qItem.id];
+                const isAnswered = (saved !== undefined);
+
+                html += `
+                    <div class="bg-slate-950/90 rounded-xl border ${isAnswered ? (saved.isCorrect ? 'border-emerald-500/40 bg-emerald-950/10' : 'border-rose-500/40 bg-rose-950/10') : 'border-slate-800'} p-4 shadow-sm" id="box-${qItem.id}">
+                        <div class="flex items-start justify-between gap-3">
+                            <h4 class="text-xs sm:text-sm font-bold text-white leading-snug">
+                                <span class="text-brand-teal font-mono mr-1">S${qIdx + 1}.</span> ${qItem.q}
+                            </h4>
+                            ${isAnswered ? (
+                                saved.isCorrect ? 
+                                '<span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded-full flex items-center gap-1 flex-shrink-0"><i class="fa-solid fa-check"></i> Tepat</span>' : 
+                                '<span class="text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/40 px-2 py-0.5 rounded-full flex items-center gap-1 flex-shrink-0"><i class="fa-solid fa-xmark"></i> Kurang Tepat</span>'
+                            ) : '<span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full flex-shrink-0">Belum Selesai</span>'}
+                        </div>
+
+                        <!-- Pilihan Jawapan -->
+                        <div class="mt-3.5 space-y-2">
+                `;
+
+                qItem.options.forEach((opt, optIdx) => {
+                    let optStyle = "bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-850";
+                    if (isAnswered) {
+                        if (optIdx === qItem.ans) {
+                            optStyle = "bg-emerald-950/50 border-emerald-500 text-emerald-200 font-semibold";
+                        } else if (saved.selected === optIdx && !saved.isCorrect) {
+                            optStyle = "bg-rose-950/50 border-rose-500 text-rose-200";
+                        } else {
+                            optStyle = "bg-slate-900/60 border-slate-900 text-slate-500 opacity-60";
+                        }
+                    }
+
+                    html += `
+                        <button onclick="pilihJawapanKuiz('${qItem.id}', ${optIdx})" 
+                                ${isAnswered ? 'disabled' : ''} 
+                                class="w-full text-left p-2.5 sm:p-3 rounded-lg border text-xs flex items-center justify-between gap-2 transition ${optStyle}">
+                            <div class="flex items-center gap-2.5">
+                                <span class="w-5 h-5 rounded-md flex items-center justify-center font-mono text-[10px] font-black ${isAnswered && optIdx === qItem.ans ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-300'}">
+                                    ${String.fromCharCode(65 + optIdx)}
+                                </span>
+                                <span>${opt}</span>
+                            </div>
+                            ${isAnswered && optIdx === qItem.ans ? '<i class="fa-solid fa-check-double text-emerald-400"></i>' : ''}
+                        </button>
+                    `;
+                });
+
+                html += `</div>`;
+
+                // Skema & Penjelasan Pensyarah
+                if (isAnswered) {
+                    html += `
+                        <div class="mt-3.5 p-3 rounded-lg bg-slate-900/90 border border-slate-800 text-xs text-slate-300 animate-fadeIn">
+                            <div class="font-bold text-brand-teal flex items-center gap-1.5 mb-1">
+                                <i class="fa-solid fa-chalkboard-user"></i> Skema & Penerangan Konsep:
+                            </div>
+                            <p class="text-slate-300 leading-relaxed text-[11px]">${qItem.expl}</p>
+                        </div>
+                    `;
+                }
+
+                html += `</div>`;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function pilihJawapanKuiz(qId, selectedIdx) {
+            const topic = syllabusData[activeTopicId];
+            const q = topic.quizzes.find(item => item.id === qId);
+            if (!q) return;
+
+            const isCorrect = (selectedIdx === q.ans);
+            appState.quizAnswers[qId] = {
+                selected: selectedIdx,
+                isCorrect: isCorrect
+            };
+
+            simpanDataLocalStorage();
+            renderKuizPengukuhan(document.getElementById('topic-body-content'), topic);
+            renderTopicProgressBars();
+            kemaskiniIndikatorMastery();
+
+            const badge = document.getElementById(`nav-topic-badge-${activeTopicId}`);
+            if (badge) badge.innerText = `${kiraSkorTopik(activeTopicId)}%`;
+            document.getElementById('topic-header-score').innerText = `${kiraSkorTopik(activeTopicId)}%`;
+
+            if (isCorrect) {
+                tunjukToast("Tahniah! Jawapan Tepat", "Skor kefahaman anda meningkat.");
+            } else {
+                tunjukToast("Kurang Tepat", "Sila rujuk skema penjelasan untuk pembetulan.");
+            }
+        }
+
+        function kemaskiniRatingKendiri(val) {
+            val = parseInt(val);
+            appState.topicRatings[activeTopicId] = val;
+            simpanDataLocalStorage();
+            renderTopicProgressBars();
+            kemaskiniIndikatorMastery();
+            
+            const badge = document.getElementById(`nav-topic-badge-${activeTopicId}`);
+            if (badge) badge.innerText = `${kiraSkorTopik(activeTopicId)}%`;
+            document.getElementById('topic-header-score').innerText = `${kiraSkorTopik(activeTopicId)}%`;
+
+            tunjukToast("Penilaian Kendiri Dikemaskini", `Tahap kefahaman Topik ${activeTopicId} ditetapkan kepada ${val}/5.`);
+        }
+
+        // PERHITUNGAN SKOR & MASTERY LOGIC
+        function kiraBetulKuizTopik(topicId) {
+            const topic = syllabusData[topicId];
+            let betul = 0;
+            topic.quizzes.forEach(q => {
+                if (appState.quizAnswers[q.id] && appState.quizAnswers[q.id].isCorrect) betul++;
+            });
+            return betul;
+        }
+
+        function kiraSkorTopik(topicId) {
+            const topic = syllabusData[topicId];
+            // Komponen Kuiz (60% berat)
+            let qDijawab = 0;
+            let qBetul = 0;
+            topic.quizzes.forEach(q => {
+                if (appState.quizAnswers[q.id] !== undefined) {
+                    qDijawab++;
+                    if (appState.quizAnswers[q.id].isCorrect) qBetul++;
+                }
+            });
+            const quizPct = (qBetul / topic.quizzes.length) * 100;
+
+            // Komponen Penilaian Kendiri (40% berat)
+            const selfRating = appState.topicRatings[topicId] || 3;
+            const selfPct = (selfRating / 5) * 100;
+
+            // Jika belum ada soalan dijawab langsung, skor = 50% daripada self rating
+            if (qDijawab === 0) {
+                return Math.round(selfPct * 0.5);
+            }
+            return Math.round((quizPct * 0.65) + (selfPct * 0.35));
+        }
+
+        function renderTopicProgressBars() {
+            const container = document.getElementById('topic-progress-bars');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= 5; i++) {
+                const topic = syllabusData[i];
+                const score = kiraSkorTopik(i);
+                
+                let barColor = "bg-rose-500";
+                if (score >= 90) barColor = "bg-emerald-400";
+                else if (score >= 75) barColor = "bg-brand-teal";
+                else if (score >= 50) barColor = "bg-amber-400";
+
+                const div = document.createElement('div');
+                div.className = "flex items-center gap-3 text-xs";
+                div.innerHTML = `
+                    <span class="w-24 truncate text-slate-300 font-semibold">${i}. ${topic.short}</span>
+                    <div class="flex-1 bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
+                        <div class="${barColor} h-full rounded-full transition-all duration-700" style="width: ${score}%"></div>
+                    </div>
+                    <span class="w-10 text-right font-mono font-bold text-slate-200">${score}%</span>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function kemaskiniIndikatorMastery() {
+            let totalSkor = 0;
+            for (let i = 1; i <= 5; i++) {
+                totalSkor += kiraSkorTopik(i);
+            }
+            const overallScore = Math.round(totalSkor / 5);
+
+            // Peratus Kuiz Selesai & Ketepatan
+            let totalQuiz = 15;
+            let answeredQuiz = 0;
+            let correctQuiz = 0;
+
+            for (let i = 1; i <= 5; i++) {
+                syllabusData[i].quizzes.forEach(q => {
+                    if (appState.quizAnswers[q.id] !== undefined) {
+                        answeredQuiz++;
+                        if (appState.quizAnswers[q.id].isCorrect) correctQuiz++;
+                    }
+                });
+            }
+
+            const accuracy = answeredQuiz > 0 ? Math.round((correctQuiz / answeredQuiz) * 100) : 0;
+
+            document.getElementById('overall-quiz-ratio').innerText = `${answeredQuiz}/${totalQuiz}`;
+            document.getElementById('overall-accuracy').innerText = `${accuracy}%`;
+
+            // SVG Circular Gauge
+            const circle = document.getElementById('gauge-circle');
+            const circumference = 339.29; // 2 * pi * 54
+            const offset = circumference - (overallScore / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            document.getElementById('overall-percentage').innerText = `${overallScore}%`;
+
+            // Warna & Status Indikator
+            const statusText = document.getElementById('mastery-status-text');
+            const descText = document.getElementById('mastery-desc-text');
+            const dot = document.getElementById('mastery-indicator-dot');
+
+            if (overallScore >= 90) {
+                circle.setAttribute('stroke', '#34d399');
+                statusText.innerText = "Cemerlang (90-100%)";
+                statusText.className = "text-xl sm:text-2xl font-black text-emerald-400 mt-0.5 tracking-tight";
+                dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
+                descText.innerText = "Tahniah! Anda menguasai keseluruhan silibus DEG30073 dengan cemerlang dan bersedia sepenuhnya.";
+            } else if (overallScore >= 75) {
+                circle.setAttribute('stroke', '#00B4D8');
+                statusText.innerText = "Mahir (75-89%)";
+                statusText.className = "text-xl sm:text-2xl font-black text-brand-teal mt-0.5 tracking-tight";
+                dot.className = "w-2.5 h-2.5 rounded-full bg-brand-teal";
+                descText.innerText = "Penguasaan konsep dan formula yang kukuh. Teruskan latihan kalkulator dan soalan pengiraan.";
+            } else if (overallScore >= 50) {
+                circle.setAttribute('stroke', '#fbbf24');
+                statusText.innerText = "Sederhana (50-74%)";
+                statusText.className = "text-xl sm:text-2xl font-black text-amber-400 mt-0.5 tracking-tight";
+                dot.className = "w-2.5 h-2.5 rounded-full bg-amber-400";
+                descText.innerText = "Pemahaman asas dicapai. Disyorkan menyemak semula topik dengan peratusan rendah dan skema soalan.";
+            } else {
+                circle.setAttribute('stroke', '#f43f5e');
+                statusText.innerText = "Perlu Bimbingan (<50%)";
+                statusText.className = "text-xl sm:text-2xl font-black text-rose-400 mt-0.5 tracking-tight";
+                dot.className = "w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse";
+                descText.innerText = "Mulakan semakan nota kuliah, jawab soalan pengukuhan, dan laraskan tahap kefahaman kendiri topik anda.";
+            }
+        }
+
+        // CALCULATOR LOGIC
+        function kiraFillFactor() {
+            const voc = parseFloat(document.getElementById('calc-voc').value) || 0;
+            const isc = parseFloat(document.getElementById('calc-isc').value) || 0;
+            const vmp = parseFloat(document.getElementById('calc-vmp').value) || 0;
+            const imp = parseFloat(document.getElementById('calc-imp').value) || 0;
+
+            if (voc <= 0 || isc <= 0) {
+                document.getElementById('output-calc-pv').innerHTML = `<span class="text-xs text-rose-400">Ralat: Nilai Voc & Isc mesti &gt; 0</span>`;
+                return;
+            }
+
+            const pmax = vmp * imp;
+            const ff = pmax / (voc * isc);
+
+            document.getElementById('output-calc-pv').innerHTML = `
+                <span class="text-xs text-slate-300">Pmax: <strong class="text-white font-mono">${pmax.toFixed(2)} W</strong></span> | 
+                <span class="text-xs text-brand-gold">FF: <strong class="font-mono">${ff.toFixed(3)}</strong> (${(ff * 100).toFixed(1)}%)</span>
+            `;
+            tunjukToast("Kalkulator PV", `Pmax: ${pmax.toFixed(2)}W | Fill Factor: ${ff.toFixed(3)}`);
+        }
+
+        function kiraWindPower() {
+            const rho = parseFloat(document.getElementById('calc-wind-rho').value) || 1.225;
+            const r = parseFloat(document.getElementById('calc-wind-radius').value) || 0;
+            const v = parseFloat(document.getElementById('calc-wind-v').value) || 0;
+            const eff = parseFloat(document.getElementById('calc-wind-eff').value) || 0.40;
+
+            const area = Math.PI * Math.pow(r, 2);
+            const totalPower = 0.5 * rho * area * Math.pow(v, 3); // Watts
+            const extractedPower = totalPower * eff;
+
+            document.getElementById('output-calc-wind').innerHTML = `
+                <span class="text-xs text-slate-300">Total: <strong class="text-white font-mono">${(totalPower / 1000).toFixed(2)} kW</strong></span> | 
+                <span class="text-xs text-brand-teal">Output: <strong class="font-mono">${(extractedPower / 1000).toFixed(2)} kW</strong></span>
+            `;
+            tunjukToast("Kalkulator Angin", `Kuasa yang diekstrak: ${(extractedPower / 1000).toFixed(2)} kW`);
+        }
+
+        function kiraHydroPower() {
+            const q = parseFloat(document.getElementById('calc-hydro-q').value) || 0;
+            const h = parseFloat(document.getElementById('calc-hydro-h').value) || 0;
+            const eff = parseFloat(document.getElementById('calc-hydro-eff').value) || 0.85;
+
+            const rho = 1000; // kg/m^3
+            const g = 9.81;   // m/s^2
+
+            const powerWatts = rho * g * q * h * eff;
+            const pKw = powerWatts / 1000;
+            const pMw = pKw / 1000;
+
+            document.getElementById('output-calc-hydro').innerHTML = `
+                <span class="text-xs text-slate-400">P Output = </span>
+                <strong class="text-sky-300 font-mono text-xs">${pKw.toFixed(2)} kW</strong>
+                <span class="text-[10px] text-slate-500 block font-mono">(${pMw.toFixed(3)} MW)</span>
+            `;
+            tunjukToast("Kalkulator Hidro", `Kuasa Dijana: ${pKw.toFixed(2)} kW`);
+        }
+
+        // TOAST ALERT NOTIFICATION
+        function tunjukToast(title, msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-msg').innerText = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+```
